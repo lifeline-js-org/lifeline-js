@@ -1,6 +1,6 @@
 {
   "name": "lifeline.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lifecycle management for Node.js applications",
   "keywords": [
     "lifecycle",
