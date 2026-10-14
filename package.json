@@ -1,0 +1,69 @@
+{
+  "name": "lifeline.js",
+  "version": "0.1.0",
+  "description": "Lifecycle management for Node.js applications",
+  "keywords": [
+    "lifecycle",
+    "lifecycle-management",
+    "lifeline",
+    "bootstrap",
+    "initialization",
+    "startup",
+    "shutdown",
+    "graceful-shutdown",
+    "signal",
+    "sigterm",
+    "sigint",
+    "rollback",
+    "dependency-graph",
+    "resource-management",
+    "nodejs",
+    "esm",
+    "typescript"
+  ],
+  "homepage": "https://github.com/lifeline-js-org/lifeline-js#readme",
+  "bugs": {
+    "url": "https://github.com/lifeline-js-org/lifeline-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lifeline-js-org/lifeline-js.git"
+  },
+  "license": "MIT",
+  "author": "viny_dev",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run clean && tsc",
+    "prepack": "npm run build",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.0.0"
+  }
+}
