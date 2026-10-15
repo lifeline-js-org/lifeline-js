@@ -57,6 +57,7 @@
     "typecheck": "tsc --noEmit",
     "build": "npm run clean && tsc",
     "prepack": "npm run build",
+    "check": "npm run build && node scripts/stability-check.mjs",
     "test": "npm run build && node --test test/*.test.mjs"
   },
   "publishConfig": {

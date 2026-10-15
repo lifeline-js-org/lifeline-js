@@ -9,6 +9,7 @@ Exemplos executáveis do Lifeline, do mais simples ao mais completo. Todos usam 
 | `error-handling.js` | Rollback em falha de `init()`, `AggregateError` e `CleanupError` |
 | `logging.js` | `prettyLogger`: timestamps relativos, cores e resumo da falha |
 | `graceful-shutdown.js` | Servidor HTTP real + SIGINT/SIGTERM com encerramento gracioso |
+| `real-app/app.mjs` | Boot completo igual ao simulador do site: `config → postgres/redis → queue → http`, com `FAIL_AT` para quebrar o boot em qualquer recurso |
 
 ## Como executar
 
