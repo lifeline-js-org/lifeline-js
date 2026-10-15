@@ -67,6 +67,41 @@ import { LifeLine } from "lifeline.js/core";
 
 Módulos como `lifeline.js/http` e `lifeline.js/signals` estão no roadmap e ganharão subpaths próprios quando tiverem funcionalidade concreta.
 
+## Logs
+
+O gerenciador emite eventos estruturados do ciclo de vida quando você passa um `logger` na construtora. O `prettyLogger()` embutido imprime tudo no console com timestamp relativo, cores e durações:
+
+```js
+import { LifeLine, prettyLogger } from "lifeline.js";
+
+const app = new LifeLine({ logger: prettyLogger() });
+```
+
+```text
++0.00s    app.start()
++0.00s    config iniciando
++0.35s    config no ar · 0.35s
++0.35s    postgres iniciando (precisa de config)
++1.45s    postgres no ar · 1.10s
++1.45s    redis iniciando (precisa de config)
++2.05s    redis falhou: ETIMEDOUT redis:6379
++2.05s    queue, http ignorados: dependem de redis
++2.05s    rollback: encerrando 2 em ordem inversa
++2.05s    postgres encerrando
++2.70s    postgres encerrado · 0.65s
++2.70s    config encerrando
++2.85s    config encerrado · 0.15s
++2.85s    LifelineStartError: redis falhou · 2 encerrados · 0 vazaram
+```
+
+Detalhes que valem saber:
+
+- Sem `logger`, nada é logado: o gerenciador não escreve em `console` por conta própria.
+- Cores ligam automaticamente quando há TTY e desligam com `NO_COLOR`; `prettyLogger({ colors })` força o estado e `prettyLogger({ write })` redireciona a saída (arquivo, pipeline, etc.).
+- A linha `LifelineStartError: ...` é **só um resumo do log** — o `start()` segue rejeitando com o erro original (ou `AggregateError` com falhas de limpeza), como descrito em [Tratamento de erros](#tratamento-de-erros).
+- Para outro destino (serviço de métricas, log estruturado), implemente `LifeLineLogger`: um consumidor único de eventos (`start`, `resource:starting`, `resource:ready`, `resource:failed`, `resources:skipped`, `resources:aborted`, `rollback`, `close:start`, `close:end`, `start:resolved`, `start:rejected`, `shutdown`, `shutdown:resolved`, `shutdown:rejected`). O logger é chamado de forma síncrona dentro do ciclo de vida: mantenha-o rápido e não lance erros nele.
+- Exemplo executável: [`examples/logging.js`](examples/logging.js).
+
 ## Encerramento e sinais
 
 `shutdown()` fecha os recursos **na ordem inversa da inicialização efetiva**, aguardando cada `close()`. Recursos sem `close()` são ignorados. Falhas em `close()` não interrompem a limpeza: todos os recursos restantes são tentados, e a rejeição é um `AggregateError` com um `CleanupError` por recurso (nome + erro real em `cause`).
@@ -156,7 +191,7 @@ As violações de estado **lançam sincronamente**; falhas operacionais rejeitam
 
 ## Exemplos
 
-A pasta [`examples/`](examples/) traz exemplos executáveis, do mais simples ao completo: registro básico, dependências entre recursos, tratamento de erros com rollback e encerramento gracioso de um servidor HTTP real com SIGINT/SIGTERM.
+A pasta [`examples/`](examples/) traz exemplos executáveis, do mais simples ao completo: registro básico, dependências entre recursos, tratamento de erros com rollback, logs do ciclo de vida com `prettyLogger` e encerramento gracioso de um servidor HTTP real com SIGINT/SIGTERM.
 
 ## Testes
 
@@ -173,6 +208,7 @@ Compila com `tsc` e roda a suíte com o `node --test` contra o `dist` real. Os t
 | `initialization.test.mjs` | Inicialização e concorrência |
 | `rollback.test.mjs` | Rollback e preservação de erros |
 | `shutdown.test.mjs` | Encerramento e estados terminais |
+| `logger.test.mjs` | Eventos do ciclo de vida e `prettyLogger` |
 | `package.test.mjs` | Entry principal e subpaths |
 
 A implementação está com 100% de linhas, branches e funções cobertos.

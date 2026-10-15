@@ -1,5 +1,19 @@
 # Changelog
 
+## Não lançado
+
+### Logs
+
+- `logger` opcional na construtora do `LifeLine` (`new LifeLine({ logger })`):
+  eventos estruturados de todo o ciclo de vida (`start`, `resource:starting`,
+  `resource:ready`, `resource:failed`, `resources:skipped`, `resources:aborted`,
+  `rollback`, `close:start`, `close:end`, `start:resolved`, `start:rejected`,
+  `shutdown`, `shutdown:resolved`, `shutdown:rejected`). Sem `logger`, nada é
+  logado — comportamento e contrato de erros inalterados.
+- `prettyLogger()`: formatador de console pronto para uso, com timestamps
+  relativos (`+1.45s`), cores (TTY/`NO_COLOR`) e saída redirecionável.
+- `examples/logging.js`: cenário de falha do redis com rollback completo.
+
 ## 0.1.0
 
 Primeira versão pública.

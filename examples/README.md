@@ -7,6 +7,7 @@ Exemplos executáveis do Lifeline, do mais simples ao mais completo. Todos usam 
 | `basic.js` | Registrar recursos, iniciar, encerrar |
 | `dependencies.js` | `dependsOn`, ordem topológica e encerramento inverso |
 | `error-handling.js` | Rollback em falha de `init()`, `AggregateError` e `CleanupError` |
+| `logging.js` | `prettyLogger`: timestamps relativos, cores e resumo da falha |
 | `graceful-shutdown.js` | Servidor HTTP real + SIGINT/SIGTERM com encerramento gracioso |
 
 ## Como executar
